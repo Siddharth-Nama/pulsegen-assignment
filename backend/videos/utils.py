@@ -1,26 +1,22 @@
-import asyncio
+import threading
+import time
 import random
-from asgiref.sync import sync_to_async
+from asgiref.sync import async_to_sync
 from pulsegen_backend.sio import sio
 from .models import Video
 
-@sync_to_async
-def get_video(video_id):
-    return Video.objects.get(id=video_id)
-
-@sync_to_async
-def save_video(video):
-    video.save()
-
-async def analysis_task(video_id):
+def run_analysis(video_id):
     try:
-        video = await get_video(video_id)
+        # We are in a thread, so we can use sync DB calls directly
+        video = Video.objects.get(id=video_id)
         
         video.status = 'processing'
-        await save_video(video)
-        await sio.emit('video_status', {'id': str(video.id), 'status': 'processing'})
+        video.save()
         
-        await asyncio.sleep(10)
+        # Emit event using async_to_sync
+        async_to_sync(sio.emit)('video_status', {'id': str(video.id), 'status': 'processing'})
+        
+        time.sleep(10)
         
         score = random.random()
         video.sensitivity_score = score
@@ -30,11 +26,12 @@ async def analysis_task(video_id):
         else:
             video.status = 'safe'
             
-        await save_video(video)
-        await sio.emit('video_status', {'id': str(video.id), 'status': video.status})
+        video.save()
+        async_to_sync(sio.emit)('video_status', {'id': str(video.id), 'status': video.status})
         
     except Exception as e:
         print(f"Error in analysis task: {e}")
 
 def perform_sensitivity_analysis(video_instance):
-    sio.start_background_task(analysis_task, video_instance.id)
+    thread = threading.Thread(target=run_analysis, args=(video_instance.id,))
+    thread.start()
