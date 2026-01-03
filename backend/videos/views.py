@@ -6,6 +6,7 @@ from .models import Video
 from .serializers import VideoSerializer
 from users.permissions import IsEditor, IsViewer, IsAdmin
 from .utils import perform_sensitivity_analysis
+from users.authentication import QueryParamsJWTAuthentication
 
 class VideoListCreateView(generics.ListCreateAPIView):
     serializer_class = VideoSerializer
@@ -48,6 +49,7 @@ class VideoDetailView(generics.RetrieveDestroyAPIView):
 
 class VideoStreamView(generics.RetrieveAPIView):
     serializer_class = VideoSerializer
+    authentication_classes = [QueryParamsJWTAuthentication]
     
     def get_permissions(self):
         return [IsViewer()]
