@@ -6,6 +6,7 @@ export default function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('viewer');
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
   const [error, setError] = useState('');
@@ -13,7 +14,7 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await register(username, email, password);
+      await register(username, email, password, role);
       navigate('/login');
     } catch (err) {
       setError('Registration failed');
@@ -54,6 +55,18 @@ export default function Register() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Role</label>
+          <select
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 border p-2"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option value="viewer">Viewer</option>
+            <option value="editor">Editor</option>
+            <option value="admin">Admin</option>
+          </select>
         </div>
         <button type="submit" className="w-full bg-primary-600 text-white p-2 rounded-md hover:bg-primary-700 transition">
           Register

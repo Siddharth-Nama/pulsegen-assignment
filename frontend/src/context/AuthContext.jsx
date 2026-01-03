@@ -29,8 +29,8 @@ export const AuthProvider = ({ children }) => {
     setUser(decoded);
   };
 
-  const register = async (username, email, password) => {
-    await api.post('/auth/register/', { username, email, password });
+  const register = async (username, email, password, role) => {
+    await api.post('/auth/register/', { username, email, password, role });
   };
 
   const logout = () => {
