@@ -2,6 +2,7 @@ from rest_framework import generics, permissions, filters
 from .models import Video
 from .serializers import VideoSerializer
 from users.permissions import IsEditor, IsViewer, IsAdmin
+from .utils import perform_sensitivity_analysis
 
 class VideoListCreateView(generics.ListCreateAPIView):
     serializer_class = VideoSerializer
@@ -23,7 +24,8 @@ class VideoListCreateView(generics.ListCreateAPIView):
         return Video.objects.filter(uploaded_by=user)
 
     def perform_create(self, serializer):
-        serializer.save(uploaded_by=self.request.user)
+        video = serializer.save(uploaded_by=self.request.user)
+        perform_sensitivity_analysis(video)
 
 class VideoDetailView(generics.RetrieveDestroyAPIView):
     serializer_class = VideoSerializer
