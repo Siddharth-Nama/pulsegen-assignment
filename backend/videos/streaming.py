@@ -1,7 +1,7 @@
 import os
 import mimetypes
 from django.http import StreamingHttpResponse
-from django.core.servers.basehttp import FileWrapper
+from wsgiref.util import FileWrapper
 
 def range_re(bytes_range, range_header):
     if not range_header:
