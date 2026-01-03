@@ -24,7 +24,9 @@ export default function MainLayout() {
             <div className="flex items-center space-x-4">
               {user ? (
                 <>
-                  <Link to="/upload" className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium">Upload</Link>
+                  {user.role !== 'viewer' && (
+                    <Link to="/upload" className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium">Upload</Link>
+                  )}
                   <button onClick={handleLogout} className="text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium">Logout</button>
                 </>
               ) : (

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import { AuthContext } from '../context/AuthContext';
 
 export default function UploadVideo() {
   const [file, setFile] = useState(null);
@@ -9,7 +10,20 @@ export default function UploadVideo() {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  if (user?.role === 'viewer') {
+    return (
+      <div className="max-w-2xl mx-auto mt-10 p-6 bg-yellow-50 rounded-lg shadow-md border border-yellow-200">
+        <h2 className="text-xl font-bold text-yellow-800 mb-2">Access Restricted</h2>
+        <p className="text-yellow-700">
+          Your account has the <strong>Viewer</strong> role, which does not have permission to upload videos.
+          Please contact an administrator or register as an Editor.
+        </p>
+      </div>
+    );
+  }
 
   const handleUpload = async (e) => {
     e.preventDefault();
