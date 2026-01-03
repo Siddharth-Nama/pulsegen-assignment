@@ -14,7 +14,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchVideos();
-    const socket = io('http://127.0.0.1:8000');
+    const socketUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://127.0.0.1:8000';
+    const socket = io(socketUrl);
 
     socket.on('connect', () => {
       console.log('Connected to socket');
