@@ -47,6 +47,8 @@ class VideoDetailView(generics.RetrieveDestroyAPIView):
             return Video.objects.all()
         return Video.objects.filter(uploaded_by=user)
 
+from .streaming import get_streaming_response
+
 class VideoStreamView(generics.RetrieveAPIView):
     serializer_class = VideoSerializer
     authentication_classes = [QueryParamsJWTAuthentication]
@@ -67,4 +69,4 @@ class VideoStreamView(generics.RetrieveAPIView):
         path = video.file.path
         if not os.path.exists(path):
             return Response(status=status.HTTP_404_NOT_FOUND)
-        return FileResponse(open(path, 'rb'))
+        return get_streaming_response(path, request)
