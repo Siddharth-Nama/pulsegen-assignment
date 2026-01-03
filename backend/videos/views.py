@@ -1,4 +1,7 @@
-from rest_framework import generics, permissions, filters
+import os
+from rest_framework import generics, permissions, filters, status
+from rest_framework.response import Response
+from django.http import FileResponse
 from .models import Video
 from .serializers import VideoSerializer
 from users.permissions import IsEditor, IsViewer, IsAdmin
@@ -42,3 +45,24 @@ class VideoDetailView(generics.RetrieveDestroyAPIView):
         if user.role == 'admin':
             return Video.objects.all()
         return Video.objects.filter(uploaded_by=user)
+
+class VideoStreamView(generics.RetrieveAPIView):
+    serializer_class = VideoSerializer
+    
+    def get_permissions(self):
+        return [IsViewer()]
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return Video.objects.none()
+        if user.role == 'admin':
+            return Video.objects.all()
+        return Video.objects.filter(uploaded_by=user)
+
+    def get(self, request, *args, **kwargs):
+        video = self.get_object()
+        path = video.file.path
+        if not os.path.exists(path):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        return FileResponse(open(path, 'rb'))
