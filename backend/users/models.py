@@ -10,9 +10,7 @@ class User(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='viewer')
     email = models.EmailField(unique=True)
 
-    # Make email required and unique
     REQUIRED_FIELDS = ['email', 'role']
-    # USERNAME_FIELD defaults to 'username'
 
     def __str__(self):
         return self.username

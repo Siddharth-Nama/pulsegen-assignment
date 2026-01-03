@@ -26,13 +26,11 @@ class Video(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # Metadata
-    size = models.BigIntegerField(default=0) # in bytes
-    duration = models.FloatField(default=0.0) # in seconds
+    size = models.BigIntegerField(default=0)
+    duration = models.FloatField(default=0.0)
     
-    # Analysis
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    sensitivity_score = models.FloatField(default=0.0) # 0 to 1
+    sensitivity_score = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.title

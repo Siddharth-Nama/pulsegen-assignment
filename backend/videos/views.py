@@ -11,9 +11,7 @@ class VideoListCreateView(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == 'POST':
-            # Editors and Admins can upload
             return [IsEditor()]
-        # Viewers (and up) can list
         return [IsViewer()]
 
     def get_queryset(self):
@@ -26,3 +24,19 @@ class VideoListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(uploaded_by=self.request.user)
+
+class VideoDetailView(generics.RetrieveDestroyAPIView):
+    serializer_class = VideoSerializer
+    
+    def get_permissions(self):
+        if self.request.method == 'DELETE':
+            return [IsEditor()]
+        return [IsViewer()]
+
+    def get_queryset(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return Video.objects.none()
+        if user.role == 'admin':
+            return Video.objects.all()
+        return Video.objects.filter(uploaded_by=user)
