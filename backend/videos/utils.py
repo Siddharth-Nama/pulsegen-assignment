@@ -1,23 +1,40 @@
-import threading
-import time
+import asyncio
 import random
+from asgiref.sync import sync_to_async
+from pulsegen_backend.sio import sio
+from .models import Video
 
-def perform_sensitivity_analysis(video_instance):
-    def analysis_task():
-        video_instance.status = 'processing'
-        video_instance.save()
+@sync_to_async
+def get_video(video_id):
+    return Video.objects.get(id=video_id)
+
+@sync_to_async
+def save_video(video):
+    video.save()
+
+async def analysis_task(video_id):
+    try:
+        video = await get_video(video_id)
         
-        time.sleep(10)
+        video.status = 'processing'
+        await save_video(video)
+        await sio.emit('video_status', {'id': str(video.id), 'status': 'processing'})
+        
+        await asyncio.sleep(10)
         
         score = random.random()
-        video_instance.sensitivity_score = score
+        video.sensitivity_score = score
         
         if score > 0.7:
-            video_instance.status = 'flagged'
+            video.status = 'flagged'
         else:
-            video_instance.status = 'safe'
+            video.status = 'safe'
             
-        video_instance.save()
+        await save_video(video)
+        await sio.emit('video_status', {'id': str(video.id), 'status': video.status})
+        
+    except Exception as e:
+        print(f"Error in analysis task: {e}")
 
-    thread = threading.Thread(target=analysis_task)
-    thread.start()
+def perform_sensitivity_analysis(video_instance):
+    sio.start_background_task(analysis_task, video_instance.id)
