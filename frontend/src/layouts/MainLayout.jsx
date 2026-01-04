@@ -40,8 +40,8 @@ export default function MainLayout() {
               {user ? (
                 <>
                   <Link 
-                    to="/" 
-                    className={`text-sm font-medium transition-colors hover:text-red-400 ${isActive('/') ? 'text-red-500' : 'text-gray-300'}`}
+                    to="/videos" 
+                    className={`text-sm font-medium transition-colors hover:text-red-400 ${isActive('/videos') ? 'text-red-500' : 'text-gray-300'}`}
                   >
                     Dashboard
                   </Link>
@@ -108,7 +108,7 @@ export default function MainLayout() {
                   </div>
                   
                   <Link 
-                    to="/" 
+                    to="/videos" 
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="block px-3 py-3 rounded-lg text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
                   >

@@ -36,7 +36,7 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row gap-4 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-200">
           {user ? (
             <Link 
-              to="/" 
+              to="/videos" 
               className="group inline-flex items-center justify-center gap-2 bg-red-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all hover:bg-red-700 hover:scale-105 shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:shadow-[0_0_30px_rgba(220,38,38,0.5)]"
             >
               Go to Dashboard
