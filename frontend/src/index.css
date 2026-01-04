@@ -6,6 +6,18 @@
 
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
+    @apply bg-neutral-950 text-gray-50 antialiased selection:bg-red-500 selection:text-white;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-neutral-950/70 backdrop-blur-lg border-b border-white/5;
+  }
+  .glass-card {
+    @apply bg-neutral-900/50 backdrop-blur-md border border-white/10 rounded-xl;
+  }
+  .text-glow {
+    text-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
   }
 }
