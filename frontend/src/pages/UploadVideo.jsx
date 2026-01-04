@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { UploadCloud, FileVideo, X, Check, AlertTriangle } from 'lucide-react';
+import { CloudUpload, FileVideo, X, Check, TriangleAlert } from 'lucide-react';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
@@ -19,7 +19,7 @@ export default function UploadVideo() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
         <div className="w-24 h-24 bg-red-500/10 rounded-full flex items-center justify-center mb-6">
-          <AlertTriangle className="w-12 h-12 text-red-500" />
+          <TriangleAlert className="w-12 h-12 text-red-500" />
         </div>
         <h2 className="text-2xl font-bold text-white mb-2">Access Restricted</h2>
         <p className="text-gray-400 max-w-md">
@@ -133,7 +133,7 @@ export default function UploadVideo() {
             ) : (
               <>
                 <div className="w-16 h-16 bg-neutral-800 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-red-500 transition-colors" />
+                  <CloudUpload className="w-8 h-8 text-gray-400 group-hover:text-red-500 transition-colors" />
                 </div>
                 <h3 className="text-lg font-medium text-white mb-1">Drag video here</h3>
                 <p className="text-gray-500 text-sm mb-4">or click to browse from computer</p>

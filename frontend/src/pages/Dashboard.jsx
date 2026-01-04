@@ -3,7 +3,7 @@ import api from '../services/api';
 import VideoPlayer from '../components/VideoPlayer';
 import { io } from 'socket.io-client';
 import { AuthContext } from '../context/AuthContext';
-import { Search, Filter, Play, AlertTriangle, Loader2, Trash2, X, AlertOctagon } from 'lucide-react';
+import { Search, Filter, Play, TriangleAlert, Loader2, Trash2, X, OctagonAlert } from 'lucide-react';
 
 export default function Dashboard() {
   const [videos, setVideos] = useState([]);
@@ -134,7 +134,7 @@ export default function Dashboard() {
                    </div>
                 ) : video.status === 'flagged' ? (
                    <div className="flex flex-col items-center gap-2">
-                     <AlertOctagon className="w-10 h-10 text-red-500/80" />
+                     <OctagonAlert className="w-10 h-10 text-red-500/80" />
                      <span className="text-xs font-medium text-red-500 uppercase tracking-wider">Flagged Content</span>
                    </div>
                 ) : (
@@ -219,7 +219,7 @@ export default function Dashboard() {
                      </>
                   ) : (
                      <>
-                        <AlertTriangle className="w-16 h-16 text-red-500 mb-4" />
+                        <TriangleAlert className="w-16 h-16 text-red-500 mb-4" />
                         <h3 className="text-xl font-bold text-white">Content Blocked</h3>
                         <p className="text-gray-400 mt-2 max-w-md">This video has been flagged as unsafe and cannot be played.</p>
                      </>
